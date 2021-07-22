@@ -62,12 +62,29 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
     }
 
   </style>
 
-  <script>
 
+  <script>
+    const sec = document.querySelector('.second-hand')
+    const min = document.querySelector('.min-hand')
+    const hour = document.querySelector('.hour-hand')
+
+    const setTime = () =>{
+      const now = new Date()
+
+      const secDeg = now.getSeconds()*360/60+90
+      const minDeg = (now.getMinutes()*360/60) + (now.getSeconds()/60*6)+90
+      const hourDeg = (now.getHours()*360/12)+(now.getMinutes()/60*30)+90
+      sec.style.transform = `rotate(${secDeg}deg)`
+      min.style.transform = `rotate(${minDeg}deg)`
+      hour.style.transform = `rotate(${hourDeg}deg)`
+    }
+    setInterval(setTime,1000)
+    
 
   </script>
 </body>
