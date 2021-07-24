@@ -43,8 +43,33 @@
       width: 100px;
     }
   </style>
-
+    
   <script>
+    
+    const img = document.querySelector('img')
+    img.style.padding=document.querySelector('#spacing').getAttribute('value')+'px'
+    img.style.filter=`blur(${document.querySelector('#blur').getAttribute('value')}px)`
+    img.style.backgroundColor=document.querySelector('#base').getAttribute('value')
+    
+    const controls = document.querySelector('.controls') 
+    
+    controls.addEventListener('change',(e)=>{
+      const item = e.target.getAttribute('id')
+      const value = e.target.value
+      switch(item){
+        case 'spacing':
+          img.style.padding = value +'px'
+          break
+        case 'blur':
+          img.style.filter=`blur(${value}px)`
+          break
+        case 'base':
+          img.style.backgroundColor=value
+          break
+        default:
+          return
+      }
+    })   
   </script>
 
 </body>
