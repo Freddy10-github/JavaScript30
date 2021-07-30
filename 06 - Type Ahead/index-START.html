@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <form class="search-form">
     <input type="text" class="search" placeholder="City or State">
     <ul class="suggestions">
@@ -17,6 +16,69 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const originSuggestions = document.querySelector('.suggestions').innerHTML
+const AllData = []
+const input = document.querySelector('.search')
+const CityData=fetch(endpoint)
+.catch(err=>console.log(err))
+.then(response=>response.json())
+.then(data=>data.map(item =>{  
+  const population = FormatNumber(Number(item.population))
+  AllData.push({
+    CityAndState:`${item.city},${item.state}`,
+    population
+  })
+}
+))
+const  FormatNumber = (n) => {
+  n += "";
+  var arr = n.split(".");
+  var re = /(\d{1,3})(?=(\d{3})+$)/g;
+  return arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
+}
+const search = (str)=>{ 
+  const searchResult =[]
+  AllData.map(item=>{
+    if(item.CityAndState.toLowerCase().includes(str)){  
+      searchResult.push(item)
+    }    
+  })  
+  return searchResult
+}
+const matchMark = (str) =>{
+  const regex = new RegExp(input.value, 'i');
+  console.log(this.value)
+  return str.replace(regex, `<span class="hl">${input.value}</span>`);  
+}
+
+
+const render = (arr) =>{
+  const suggestions = document.querySelector('.suggestions')
+  arr.map(item=>{
+    const suggestion = document.createElement('li')
+    const name = document.createElement('span')
+    const population = document.createElement('span')
+    name.classList.add('name')
+    name.innerHTML = matchMark(item.CityAndState)
+    // console.log(name.innerHTML)
+    suggestion.appendChild(name)
+
+
+    population.classList.add('population')
+    population.innerText = item.population
+    suggestion.appendChild(population)
+    suggestions.appendChild(suggestion)
+  })
+}
+input.addEventListener('input', (e)=>{
+  if(input.value){
+    document.querySelector('.suggestions').innerHTML=""
+    const searchResult = search(input.value.toLowerCase())
+    render(searchResult)
+  } 
+  else
+    document.querySelector('.suggestions').innerHTML=originSuggestions
+})
 </script>
 </body>
 </html>
