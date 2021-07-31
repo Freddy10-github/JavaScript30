@@ -47,7 +47,6 @@ const search = (str)=>{
 }
 const matchMark = (str) =>{
   const regex = new RegExp(input.value, 'i');
-  console.log(this.value)
   return str.replace(regex, `<span class="hl">${input.value}</span>`);  
 }
 
