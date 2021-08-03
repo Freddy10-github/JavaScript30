@@ -96,6 +96,36 @@
   </div>
 
 <script>
+const checkboxes = Array.from(document.querySelectorAll('input'));
+let isShiftDown = false
+let lastChecked
+function  clickHandle(e) {
+  // console.log(this)
+  let betweenCheck = false
+  if(isShiftDown && this.checked){
+    
+    checkboxes.forEach(checkbox=>{
+      if( checkbox === this || checkbox === lastChecked)
+        betweenCheck = !betweenCheck
+      if(betweenCheck)
+      checkbox.checked = true
+    })
+  }
+  lastChecked = this
+}
+window.addEventListener('keydown',(e)=>{
+  if (isShiftDown)
+    return
+  if (e.which === 16)
+  isShiftDown = true
+  // console.log(isShiftDown)
+})
+window.addEventListener('keyup',(e)=>{
+  if (e.which === 16)
+    isShiftDown =false
+})
+
+checkboxes.forEach(checkbox => checkbox.addEventListener('click', clickHandle));
 </script>
 </body>
 </html>
