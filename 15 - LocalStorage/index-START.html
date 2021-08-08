@@ -26,10 +26,61 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  const form = document.querySelector('form')
+  const plates = document.querySelector('.plates')
+  let count = Number(localStorage.getItem('count'))||0
 
+  function appendItem(str){
+    const currentItems = JSON.parse(localStorage.getItem('items'))||[]
+    currentItems.push({
+      id:count,
+      isDone:false,
+      item : str
+    })
+    localStorage.setItem('items',JSON.stringify(currentItems))
+    count += 1
+    localStorage.setItem('count',count)
+    reder(currentItems)
+    
+  }
+  function reder(items){
+    let str = ""
+
+    items.forEach(item=>{
+      console.log(item)
+      str += `<li>
+            <input type="checkbox" ${item.isDone? 'checked':'' } id="item${item.id}"/>
+            <label for = "item${item.id}">${item.item}</label>
+          </li>`
+    })
+    plates.innerHTML = str;
+    
+  }
+  function Done (id){
+    const currentItems = JSON.parse(localStorage.getItem('items'))
+    
+    currentItems.forEach(item=>{
+      if(item.id == id)
+        item.isDone = !item.isDone
+      localStorage.setItem('items',JSON.stringify(currentItems))
+      
+    })
+  }
+  form.addEventListener('submit',(e)=>{
+    e.preventDefault()
+    // console.log(e.target)
+    const inputText = document.querySelector('input[type="text"]')
+    appendItem(inputText.value)
+    inputText.value = ""
+  })
+  reder(JSON.parse(localStorage.getItem('items'))?JSON.parse(localStorage.getItem('items')):[])
+  plates.addEventListener('click',(e)=>{
+    // e.stopImmediatePropagation()
+    if(!e.target.getAttribute('for'))
+      return
+    else
+      Done(e.target.getAttribute('for').split('item')[1])
+  })
 </script>
 
 
